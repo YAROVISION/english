@@ -1,0 +1,839 @@
+# -*- coding: utf-8 -*-
+import json
+
+lessons_data = [
+    {
+        "id": 1,
+        "title": "Базова матриця дієслова",
+        "subtitle": "3 часи × 3 форми (Ствердження, Заперечення, Питання)",
+        "badge": "Основа основ",
+        "icon": "⚡",
+        "questions": [
+            {
+                "id": 101,
+                "type": "translate",
+                "question": "Як правильно сказати англійською: «Він любить»?",
+                "options": ["He love", "He loves", "He is love", "He loved"],
+                "answer": 1,
+                "hint": "У теперішньому часі для he/she/it дієслово отримує закінчення -s.",
+                "explanation": "У Present Simple для третьої особи однини (він, вона, воно) до дієслова завжди додається закінчення -s: «He loves».",
+                "speechText": "He loves"
+            },
+            {
+                "id": 102,
+                "type": "negative",
+                "question": "Як перекласти речення: «Я не працюю»?",
+                "options": ["I not work", "I don't work", "I doesn't work", "I am not work"],
+                "answer": 1,
+                "hint": "Для займенника I (я) заперечення в теперішньому часі утворюється за допомогою don't.",
+                "explanation": "Для I, you, we, they у запереченні теперішнього часу використовується «don't» + інфінітив: «I don't work».",
+                "speechText": "I don't work"
+            },
+            {
+                "id": 103,
+                "type": "question",
+                "question": "Як правильно запитати: «Він живе тут?»",
+                "options": ["Do he live here?", "Does he lives here?", "Does he live here?", "Is he live here?"],
+                "answer": 2,
+                "hint": "Для he використовується Does, а смислове дієслово втрачає закінчення -s.",
+                "explanation": "Питання з he/she вимагає «Does», а основне дієслово стоїть у чистій початковій формі (без -s): «Does he live here?».",
+                "speechText": "Does he live here?"
+            },
+            {
+                "id": 104,
+                "type": "past",
+                "question": "Як сказати у минулому часі: «Я бачив це вчора»?",
+                "options": ["I seed it yesterday", "I saw it yesterday", "I didn't see it", "I see it yesterday"],
+                "answer": 1,
+                "hint": "Дієслово see — неправильне. Його 2-га форма: saw.",
+                "explanation": "to see — неправильне дієслово, тому в ствердному минулому часі використовується форма «saw»: «I saw it yesterday».",
+                "speechText": "I saw it yesterday"
+            },
+            {
+                "id": 105,
+                "type": "past_neg",
+                "question": "Оберіть правильний переклад: «Ми не знали»",
+                "options": ["We didn't know", "We didn't knew", "We not know", "We don't know"],
+                "answer": 0,
+                "hint": "Після didn't дієслово ЗАВЖДИ повертається у першу початкову форму!",
+                "explanation": "Заперечення минулого часу утворюється: didn't + початкова форма дієслова (know, а не knew): «We didn't know».",
+                "speechText": "We didn't know"
+            },
+            {
+                "id": 106,
+                "type": "future",
+                "question": "Як запитати: «Ти прийдеш завтра?»",
+                "options": ["Do you come tomorrow?", "Will you come tomorrow?", "Did you come tomorrow?", "Are you come tomorrow?"],
+                "answer": 1,
+                "hint": "Для майбутнього часу на перше місце ставимо допоміжне дієслово Will.",
+                "explanation": "Питання в майбутньому часі починається з «Will»: «Will you come tomorrow?».",
+                "speechText": "Will you come tomorrow?"
+            },
+            {
+                "id": 107,
+                "type": "mistake",
+                "question": "Знайдіть речення з ПОМИЛКОЮ:",
+                "options": ["Did you see him?", "She doesn't like milk", "Did he came yesterday?", "I will not go"],
+                "answer": 2,
+                "hint": "Зверніть увагу на допоміжне Did та форму наступного дієслова.",
+                "explanation": "Після допоміжного «Did» дієслово повинно бути у першій формі: «Did he come?», а не «Did he came?».",
+                "speechText": "Did he come yesterday?"
+            },
+            {
+                "id": 108,
+                "type": "translate",
+                "question": "Перекладіть: «Вона не відкрила двері»",
+                "options": ["She didn't opened the door", "She doesn't opened the door", "She didn't open the door", "She not open the door"],
+                "answer": 2,
+                "hint": "Минулий час, заперечення: didn't + перша форма дієслова.",
+                "explanation": "Правильна формула: She + didn't + open the door.",
+                "speechText": "She didn't open the door"
+            },
+            {
+                "id": 109,
+                "type": "matrix",
+                "question": "Яка форма відповідає клітинці [Ствердження (+) / Минулий час] для дієслова «to go»?",
+                "options": ["goed", "went", "will go", "gone"],
+                "answer": 1,
+                "hint": "Дієслово «йти / їхати» має особливу форму в Past Simple.",
+                "explanation": "Форма минулого часу для дієслова to go — «went». Наприклад: «I went to Kyiv» (Я їздив до Києва).",
+                "speechText": "went"
+            },
+            {
+                "id": 110,
+                "type": "translate",
+                "question": "Як запитати англійською: «Ти любиш каву?»",
+                "options": ["You love coffee?", "Do you love coffee?", "Does you love coffee?", "Are you love coffee?"],
+                "answer": 1,
+                "hint": "Питання до 'you' у Present Simple починається з Do.",
+                "explanation": "Для займенника you питання утворюється за допомогою допоміжного «Do»: «Do you love coffee?».",
+                "speechText": "Do you love coffee?"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Займенники та слова на -tion",
+        "subtitle": "Хто, кому, чий + спеціальні питання та 50 000 спільних слів",
+        "badge": "Лексичний стрибок",
+        "icon": "💬",
+        "questions": [
+            {
+                "id": 201,
+                "type": "pronouns",
+                "question": "Як перекласти: «Він допомагає мені»?",
+                "options": ["He helps I", "He helps me", "He helps my", "He help me"],
+                "answer": 1,
+                "hint": "Кому? (мені) — в об'єктному відмінку це me.",
+                "explanation": "В ролі додатка (кому?) займенник 'I' перетворюється на 'me': «He helps me».",
+                "speechText": "He helps me"
+            },
+            {
+                "id": 202,
+                "type": "question_words",
+                "question": "Оберіть правильний переклад: «Де ти живеш?»",
+                "options": ["When do you live?", "Where do you live?", "Why do you live?", "What do you live?"],
+                "answer": 1,
+                "hint": "Питальне слово 'Де? / Куди?' англійською — Where.",
+                "explanation": "«Where» означає де або куди. Правильна формула: Where + do + you + live?",
+                "speechText": "Where do you live?"
+            },
+            {
+                "id": 203,
+                "type": "possessive",
+                "question": "Як сказати: «Це її книга»?",
+                "options": ["This is she book", "This is her book", "This is hers book", "This is his book"],
+                "answer": 1,
+                "hint": "Чий? Вона -> її (присвійний займенник перед іменником) — her.",
+                "explanation": "Присвійний займенник від she — «her»: «This is her book».",
+                "speechText": "This is her book"
+            },
+            {
+                "id": 204,
+                "type": "tion_rule",
+                "question": "Яке англійське слово відповідає українському «ситуація»?",
+                "options": ["situacity", "situation", "situatence", "situament"],
+                "answer": 1,
+                "hint": "Українське закінчення -ція перетворюється на англійське -tion.",
+                "explanation": "Слова на -ція переходять в англійські на -tion: ситуація → situation [ˌsɪtʃuˈeɪʃn].",
+                "speechText": "situation"
+            },
+            {
+                "id": 205,
+                "type": "special_question",
+                "question": "Як запитати: «Коли ти прийдеш?»",
+                "options": ["When will you come?", "When you will come?", "When do you came?", "Where will you come?"],
+                "answer": 0,
+                "hint": "Порядок слів у питанні: [Питальне слово] + will + [підмет] + [дієслово]?",
+                "explanation": "Допоміжне дієслово will обов'язково стоїть перед підметом you: «When will you come?».",
+                "speechText": "When will you come?"
+            },
+            {
+                "id": 206,
+                "type": "pronouns",
+                "question": "Як перекласти речення: «Ми бачили їх учора»?",
+                "options": ["We saw they yesterday", "We saw their yesterday", "We saw them yesterday", "We see them yesterday"],
+                "answer": 2,
+                "hint": "Кого? (їх) — в ролі додатка they перетворюється на them.",
+                "explanation": "Об'єктна форма займенника they — «them». Минулий час дієслова see — «saw»: «We saw them yesterday».",
+                "speechText": "We saw them yesterday"
+            },
+            {
+                "id": 207,
+                "type": "vocabulary",
+                "question": "Яке значення має питальне слово «Why?»",
+                "options": ["Як?", "Хто?", "Чому? / Навіщо?", "Коли?"],
+                "answer": 2,
+                "hint": "Why asking for a reason.",
+                "explanation": "«Why» перекладається як «Чому?» або «Навіщо?». Наприклад: «Why are you here?».",
+                "speechText": "Why"
+            },
+            {
+                "id": 208,
+                "type": "translate",
+                "question": "Як сказати: «Що ти думаєш про це?»",
+                "options": ["What do you think about it?", "What you think about it?", "How do you think about it?", "What did you thought about it?"],
+                "answer": 0,
+                "hint": "В англійській запитують саме «What do you think...» (Що ти думаєш), а не How.",
+                "explanation": "В англійській мові стійке питання: «What do you think about it?».",
+                "speechText": "What do you think about it?"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Дієслово to be",
+        "subtitle": "Система координат: am / is / are, was / were, will be",
+        "badge": "Дієслово-зв'язка",
+        "icon": "🌟",
+        "questions": [
+            {
+                "id": 301,
+                "type": "present_be",
+                "question": "Як правильно перекласти: «Він лікар»?",
+                "options": ["He doctor", "He is a doctor", "He are a doctor", "He be a doctor"],
+                "answer": 1,
+                "hint": "В англійському реченні обов'язково має бути дієслово-зв'язка is для he.",
+                "explanation": "В англійській мові не можна пропускати зв'язку. Для 'he' це 'is' + артикль перед професією: «He is a doctor».",
+                "speechText": "He is a doctor"
+            },
+            {
+                "id": 302,
+                "type": "present_be",
+                "question": "Оберіть правильну форму для «ми вдома»:",
+                "options": ["We is at home", "We am at home", "We are at home", "We at home"],
+                "answer": 2,
+                "hint": "Для займенника We у теперішньому часі використовується are.",
+                "explanation": "Для множини (we, you, they) в Present Simple використовується форма «are»: «We are at home».",
+                "speechText": "We are at home"
+            },
+            {
+                "id": 303,
+                "type": "past_be",
+                "question": "Як сказати: «Вчора вони були дуже зайняті»?",
+                "options": ["Yesterday they was very busy", "Yesterday they were very busy", "Yesterday they are very busy", "Yesterday they will be very busy"],
+                "answer": 1,
+                "hint": "Для множини (they) у минулому часі використовується were.",
+                "explanation": "У Past Simple: was — для однини (I, he, she, it), а were — для множини (we, you, they): «they were very busy».",
+                "speechText": "Yesterday they were very busy"
+            },
+            {
+                "id": 304,
+                "type": "question_be",
+                "question": "Як правильно запитати: «Ти готовий?»",
+                "options": ["Do you ready?", "Are you ready?", "Is you ready?", "You are ready?"],
+                "answer": 1,
+                "hint": "З прикметником ready потрібне дієслово to be, винесене наперед.",
+                "explanation": "Ready — прикметник («готовий»), тому використовується дієслово to be: «Are you ready?». Допоміжне Do тут НЕ потрібне!",
+                "speechText": "Are you ready?"
+            },
+            {
+                "id": 305,
+                "type": "neg_be",
+                "question": "Як перекласти: «Я не втомлений»?",
+                "options": ["I don't tired", "I am not tired", "I not tired", "I didn't tired"],
+                "answer": 1,
+                "hint": "Заперечення з to be утворюється просто додаванням not: am not.",
+                "explanation": "«Tired» — прикметник («втомлений»). Заперечення: «I am not tired».",
+                "speechText": "I am not tired"
+            },
+            {
+                "id": 306,
+                "type": "future_be",
+                "question": "Як сказати: «Завтра ми будемо тут»?",
+                "options": ["Tomorrow we will here", "Tomorrow we will be here", "Tomorrow we are here", "Tomorrow we shall here"],
+                "answer": 1,
+                "hint": "У майбутньому часі для to be завжди вживається зв'язка will be.",
+                "explanation": "Форма майбутнього часу дієслова to be — «will be»: «Tomorrow we will be here».",
+                "speechText": "Tomorrow we will be here"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Етикет, привітання та орієнтація",
+        "subtitle": "Формули ввічливості, знайомство та базовий діалог",
+        "badge": "Живий діалог",
+        "icon": "🤝",
+        "questions": [
+            {
+                "id": 401,
+                "type": "etiquette",
+                "question": "Що відповісти ввічливо на фразу «Thank you very much!»?",
+                "options": ["Please!", "You are welcome!", "Sorry!", "Good evening!"],
+                "answer": 1,
+                "hint": "В англійській мові відповіддю на подяку є вираз 'You are welcome'.",
+                "explanation": "«You are welcome!» — це стандартна й найввічливіша відповідь на подяку («Будь ласка / Нема за що»).",
+                "speechText": "You are welcome"
+            },
+            {
+                "id": 402,
+                "type": "apology",
+                "question": "Як ввічливо привернути увагу перехожого на вулиці?",
+                "options": ["Sorry!", "Excuse me!", "Listen to me!", "Hello you!"],
+                "answer": 1,
+                "hint": "Перед тим як потурбувати незнайому людину, кажуть 'Excuse me'.",
+                "explanation": "«Excuse me» вживають ДО дії (щоб вибачитися за турботу або перепитати), а «Sorry» — ПІСЛЯ того, як сталася прикрість.",
+                "speechText": "Excuse me"
+            },
+            {
+                "id": 403,
+                "type": "dialogue",
+                "question": "Як правильно перекласти: «Приємно познайомитися!»?",
+                "options": ["Good to see you!", "Nice to meet you!", "Fine to know you!", "Happy to find you!"],
+                "answer": 1,
+                "hint": "Meet — зустрічати / знайомитися.",
+                "explanation": "Класична фраза при знайомстві: «Nice to meet you!».",
+                "speechText": "Nice to meet you"
+            },
+            {
+                "id": 404,
+                "type": "origin",
+                "question": "Як запитати іноземця: «Звідки ви?»",
+                "options": ["Where you from?", "Where are you from?", "Where do you from?", "From where you are?"],
+                "answer": 1,
+                "hint": "Обов'язково потрібне дієслово-зв'язка are.",
+                "explanation": "Правильне граматичне питання: «Where are you from?».",
+                "speechText": "Where are you from?"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Прикметники, ступені порівняння та час",
+        "subtitle": "Кращий, найшвидший, дні тижня та прийменники часу (at / on / in)",
+        "badge": "Порівняння",
+        "icon": "📈",
+        "questions": [
+            {
+                "id": 501,
+                "type": "comparison",
+                "question": "Яка форма порівняння для слова «good» (хороший)?",
+                "options": ["gooder", "more good", "better", "best"],
+                "answer": 2,
+                "hint": "Good — виняток! Запам'ятайте трійку: good - better - the best.",
+                "explanation": "Прикметник good є винятком. Ступені порівняння: good → better (кращий) → the best (найкращий).",
+                "speechText": "better"
+            },
+            {
+                "id": 502,
+                "type": "time_prep",
+                "question": "Який прийменник вживається з днями тижня: «___ Monday»?",
+                "options": ["in", "at", "on", "to"],
+                "answer": 2,
+                "hint": "З днями тижня ЗАВЖДИ використовується прийменник ON.",
+                "explanation": "Золоте правило: з днями тижня та конкретними датами вживається прийменник ON («on Monday», «on Friday»).",
+                "speechText": "on Monday"
+            },
+            {
+                "id": 503,
+                "type": "comparison",
+                "question": "Як сказати: «Ця книга цікавіша, ніж та»?",
+                "options": ["This book is interestinger than that one", "This book is more interesting than that one", "This book is the most interesting than that one", "This book is interesting than that one"],
+                "answer": 1,
+                "hint": "Для довгих прикметників (3+ склади) використовуємо слово MORE.",
+                "explanation": "Слово interesting довге, тому ступінь порівняння утворюється з «more»: «more interesting than...».",
+                "speechText": "This book is more interesting than that one"
+            },
+            {
+                "id": 504,
+                "type": "time_prep",
+                "question": "Який прийменник потрібен для точного часу: «___ 7 o'clock»?",
+                "options": ["at", "on", "in", "by"],
+                "answer": 0,
+                "hint": "Для годин і точного моменту використовується AT.",
+                "explanation": "Точний час за годинником вимагає прийменника AT: «at 7 o'clock», «at midnight».",
+                "speechText": "at seven o'clock"
+            },
+            {
+                "id": 505,
+                "type": "superlative",
+                "question": "Як перекласти: «найшвидший автомобіль»?",
+                "options": ["fastest car", "the fastest car", "the most fast car", "more faster car"],
+                "answer": 1,
+                "hint": "У найвищому ступені обов'язковий артикль the та суфікс -est.",
+                "explanation": "Для коротких слів у найвищому ступені ставимо артикль THE і суфікс -EST: «the fastest car».",
+                "speechText": "the fastest car"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Займенники some, any, no, every",
+        "subtitle": "Конструктор: щось, хтось, ніде, всюди та правило одного заперечення",
+        "badge": "Конструктор Lego",
+        "icon": "🧩",
+        "questions": [
+            {
+                "id": 601,
+                "type": "double_neg",
+                "question": "Як правильно перекласти речення: «Я нічого не знаю»?",
+                "options": ["I don't know nothing", "I don't know anything", "I know nothing not", "I know not anything"],
+                "answer": 1,
+                "hint": "В англійській мові заборонено подвійне заперечення! Якщо є don't, то вживається anything.",
+                "explanation": "В англійській мові може бути лише одне заперечення. Правильно або «I don't know anything», або «I know nothing».",
+                "speechText": "I don't know anything"
+            },
+            {
+                "id": 602,
+                "type": "vocabulary",
+                "question": "Що означає слово «everywhere»?",
+                "options": ["Ніде", "Десь", "Всюди / Скрізь", "Кудись"],
+                "answer": 2,
+                "hint": "Every (кожен/всі) + where (місце).",
+                "explanation": "«Everywhere» утворюється від every + where і перекладається як «скрізь / всюди».",
+                "speechText": "everywhere"
+            },
+            {
+                "id": 603,
+                "type": "someone",
+                "question": "Як сказати: «Хтось стукає у двері»?",
+                "options": ["Anybody is knocking at the door", "Somebody is knocking at the door", "Nobody is knocking at the door", "Every is knocking at the door"],
+                "answer": 1,
+                "hint": "У стверджувальному реченні 'хтось' — це Somebody або Someone.",
+                "explanation": "У ствердженні вживається «Somebody» або «Someone»: «Somebody is knocking at the door».",
+                "speechText": "Somebody is knocking at the door"
+            },
+            {
+                "id": 604,
+                "type": "nothing",
+                "question": "Оберіть граматично правильний варіант:",
+                "options": ["There is nothing in the box", "There isn't nothing in the box", "There is not no one in the box", "There are nothing in box"],
+                "answer": 0,
+                "hint": "There is (ствердне дієслово) + nothing (одне заперечення).",
+                "explanation": "Оскільки «nothing» вже містить заперечення, дієслово має бути у ствердній формі «is»: «There is nothing in the box».",
+                "speechText": "There is nothing in the box"
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "title": "Модальні дієслова: can, must, should, may",
+        "subtitle": "Здатність, обов'язок, порада та дозвіл без часток 'to'",
+        "badge": "Модальність",
+        "icon": "🎯",
+        "questions": [
+            {
+                "id": 701,
+                "type": "modal_rules",
+                "question": "Оберіть граматично ПРАВИЛЬНЕ речення:",
+                "options": ["I can to speak English", "I can speak English", "I cans speak English", "I can speaking English"],
+                "answer": 1,
+                "hint": "Після модального дієслова CAN частка 'to' та закінчення НЕ ставляться.",
+                "explanation": "Після модальних дієслів (can, must, should, may) дієслово стоїть у голій початковій формі без частки 'to': «I can speak English».",
+                "speechText": "I can speak English"
+            },
+            {
+                "id": 702,
+                "type": "advice",
+                "question": "Яке модальне дієслово вживається для надання дружньої поради («Тобі варто...»)?",
+                "options": ["must", "can", "should", "may"],
+                "answer": 2,
+                "hint": "Для порад і рекомендацій вживають should.",
+                "explanation": "«Should» виражає дружню рекомендацію або пораду («слід, варто»): «You should rest» (Тобі варто відпочити).",
+                "speechText": "You should rest"
+            },
+            {
+                "id": 703,
+                "type": "permission",
+                "question": "Як ввічливо попросити дозволу увійти до кабінету?",
+                "options": ["Must I come in?", "May I come in?", "Should I to come in?", "Can I to come in?"],
+                "answer": 1,
+                "hint": "Ввічливий дозвіл — це May.",
+                "explanation": "«May I come in?» — ввічливе прохання про дозвіл («Чи можу я зайти?»).",
+                "speechText": "May I come in?"
+            },
+            {
+                "id": 704,
+                "type": "obligation",
+                "question": "Як сказати: «Ти мусиш дотримуватися закону»?",
+                "options": ["You should to follow the law", "You must follow the law", "You must to follow the law", "You can following the law"],
+                "answer": 1,
+                "hint": "Категоричний обов'язок — must без частки to.",
+                "explanation": "«Must» виражає суворий обов'язок або закон і не потребує частки to: «You must follow the law».",
+                "speechText": "You must follow the law"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "title": "Прийменники напрямку та множина іменників",
+        "subtitle": "Тріада TO / IN / FROM та винятки множини (men, children, people)",
+        "badge": "Простір і форма",
+        "icon": "🧭",
+        "questions": [
+            {
+                "id": 801,
+                "type": "direction",
+                "question": "Оберіть правильний прийменник: «I am going ___ Kyiv» (рух у напрямку міста):",
+                "options": ["in", "at", "to", "from"],
+                "answer": 2,
+                "hint": "Напрямок руху (Куди?) позначається прийменником TO.",
+                "explanation": "Прийменник «TO» вказує на напрямок руху: «go to Kyiv» (їхати до Києва).",
+                "speechText": "I am going to Kyiv"
+            },
+            {
+                "id": 802,
+                "type": "plural_exception",
+                "question": "Яка форма множини для слова «child» (дитина)?",
+                "options": ["childs", "childrens", "children", "childes"],
+                "answer": 2,
+                "hint": "Один із головних винятків множини в англійській мові.",
+                "explanation": "Слово child у множині має неправильну форму «children» (діти), без додаткового закінчення -s!",
+                "speechText": "children"
+            },
+            {
+                "id": 803,
+                "type": "plural_exception",
+                "question": "Як перекласти у множині: «чоловіки та жінки»?",
+                "options": ["mans and womans", "men and women", "mens and womens", "man and woman"],
+                "answer": 1,
+                "hint": "Обидва слова змінюють кореневу голосну: man -> men, woman -> women.",
+                "explanation": "Правильні форми винятків: man → men [men], woman → women [ˈwɪmɪn].",
+                "speechText": "men and women"
+            },
+            {
+                "id": 804,
+                "type": "preposition",
+                "question": "Як сказати: «кава без цукру»?",
+                "options": ["coffee with sugar", "coffee without sugar", "coffee no sugar", "coffee about sugar"],
+                "answer": 1,
+                "hint": "Без — without.",
+                "explanation": "«Without» означає «без»: «coffee without sugar».",
+                "speechText": "coffee without sugar"
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "title": "Зворотні займенники та розпорядок дня",
+        "subtitle": "Myself, yourself та опис щоденних звичок",
+        "badge": "Про себе",
+        "icon": "🪞",
+        "questions": [
+            {
+                "id": 901,
+                "type": "reflexive",
+                "question": "Як перекласти фразу: «Я зробив це сам»?",
+                "options": ["I did it my", "I did it myself", "I did it me", "I did it self"],
+                "answer": 1,
+                "hint": "Зворотний займенник від I — myself.",
+                "explanation": "Для займенника I зворотна форма — «myself»: «I did it myself» (Я зробив це сам/сама).",
+                "speechText": "I did it myself"
+            },
+            {
+                "id": 902,
+                "type": "reflexive",
+                "question": "Що означає вираз «Believe in yourself!»?",
+                "options": ["Вір у своїх друзів!", "Вір у себе!", "Бережи себе!", "Будь уважним!"],
+                "answer": 1,
+                "hint": "Yourself — ти сам, себе.",
+                "explanation": "«Believe in yourself!» — популярне підбадьорення: «Вір у себе!».",
+                "speechText": "Believe in yourself"
+            },
+            {
+                "id": 903,
+                "type": "daily_routine",
+                "question": "Яке фразове дієслово означає «прокидатися»?",
+                "options": ["to give up", "to wake up", "to look for", "to turn on"],
+                "answer": 1,
+                "hint": "Wake up — відкрити очі після сну.",
+                "explanation": "«To wake up» — прокидатися (на відміну від «get up» — фізично підвестися з ліжка).",
+                "speechText": "to wake up"
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "title": "Зворот there is / there are",
+        "subtitle": "Опис простору та наявності предметів",
+        "badge": "Конструкція наявності",
+        "icon": "🛋️",
+        "questions": [
+            {
+                "id": 1001,
+                "type": "there_is",
+                "question": "Як правильно сказати: «На столі лежить яблуко»?",
+                "options": ["There is an apple on the table", "There are an apple on the table", "On the table is an apple", "There will apple on table"],
+                "answer": 0,
+                "hint": "Одне яблуко (однина) — використовуємо There is.",
+                "explanation": "Для одного предмета в теперішньому часі вживається зворот «There is»: «There is an apple on the table».",
+                "speechText": "There is an apple on the table"
+            },
+            {
+                "id": 1002,
+                "type": "there_are",
+                "question": "Оберіть речення для множини («У місті багато парків»):",
+                "options": ["There is many parks in the city", "There are many parks in the city", "There were not parks in city", "There be many parks"],
+                "answer": 1,
+                "hint": "Parks — множина, тому потрібне There are.",
+                "explanation": "З іменниками у множині використовується «There are»: «There are many parks in the city».",
+                "speechText": "There are many parks in the city"
+            },
+            {
+                "id": 1003,
+                "type": "there_question",
+                "question": "Як запитати: «Чи є якісь запитання?»",
+                "options": ["Is there any questions?", "Are there any questions?", "Do there are questions?", "There are any questions?"],
+                "answer": 1,
+                "hint": "Questions у множині, дієслово are виноситься на початок.",
+                "explanation": "Питання для множини починається з «Are there»: «Are there any questions?».",
+                "speechText": "Are there any questions?"
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "title": "to be going to та to have to",
+        "subtitle": "Плани, наміри та необхідність за обставинами",
+        "badge": "Наміри та обов'язки",
+        "icon": "🗓️",
+        "questions": [
+            {
+                "id": 1101,
+                "type": "going_to",
+                "question": "Як сказати: «Я збираюся купити новий телефон»?",
+                "options": ["I go to buy a new phone", "I am going to buy a new phone", "I will going to buy a new phone", "I am go buy phone"],
+                "answer": 1,
+                "hint": "Конструкція: am/is/are + going to + дієслово.",
+                "explanation": "Для вираження наміру вживається конструкція to be going to: «I am going to buy a new phone».",
+                "speechText": "I am going to buy a new phone"
+            },
+            {
+                "id": 1102,
+                "type": "have_to",
+                "question": "Як перекласти: «Він мусить працювати сьогодні» (змушений обставинами)?",
+                "options": ["He have to work today", "He has to work today", "He is have to work", "He must to work today"],
+                "answer": 1,
+                "hint": "Для he дієслово have перетворюється на has.",
+                "explanation": "Для 3-ї особи однини (he/she/it) вживається «has to»: «He has to work today».",
+                "speechText": "He has to work today"
+            },
+            {
+                "id": 1103,
+                "type": "had_to",
+                "question": "Як сказати в минулому часі: «Учора я мусив піти рано»?",
+                "options": ["Yesterday I must leave early", "Yesterday I had to leave early", "Yesterday I have to leave early", "Yesterday I was leave early"],
+                "answer": 1,
+                "hint": "Must не має форми минулого часу, замість нього використовується had to.",
+                "explanation": "У минулому часі замість must вживається форма «had to»: «Yesterday I had to leave early».",
+                "speechText": "Yesterday I had to leave early"
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "title": "Тривалий час (Continuous)",
+        "subtitle": "to be + V-ing: дія розгортається просто зараз",
+        "badge": "Процес у моменті",
+        "icon": "⏳",
+        "questions": [
+            {
+                "id": 1201,
+                "type": "continuous_form",
+                "question": "Як сказати: «Я читаю цікаву книгу зараз (у цю секунду)»?",
+                "options": ["I read an interesting book now", "I am reading an interesting book now", "I reading an interesting book now", "I was read book now"],
+                "answer": 1,
+                "hint": "Present Continuous: am/is/are + дієслово з закінченням -ing.",
+                "explanation": "Дія відбувається прямо зараз: потрібна зв'язка «am» + дієслово з «-ing»: «I am reading an interesting book now».",
+                "speechText": "I am reading an interesting book now"
+            },
+            {
+                "id": 1202,
+                "type": "continuous_question",
+                "question": "Як запитати: «Що ти зараз робиш?»",
+                "options": ["What do you do now?", "What are you doing now?", "What you are doing now?", "What doing you now?"],
+                "answer": 1,
+                "hint": "Питання в Present Continuous: What + are + you + doing?",
+                "explanation": "Спеціальне питання про поточну дію: «What are you doing now?».",
+                "speechText": "What are you doing now?"
+            },
+            {
+                "id": 1203,
+                "type": "simple_vs_cont",
+                "question": "Яке речення описує постійний факт, а не тимчасову дію?",
+                "options": ["He is working hard today", "It is raining outside", "I live in Ukraine", "She is sleeping now"],
+                "answer": 2,
+                "hint": "Fact / state = Simple (без -ing).",
+                "explanation": "«I live in Ukraine» — це постійний факт (Present Simple). Усі інші варіанти описують тимчасовий процес прямо зараз (Continuous).",
+                "speechText": "I live in Ukraine"
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "title": "Доконаний час (Present Perfect)",
+        "subtitle": "have / has + 3-я форма: місток між минулим і теперішнім результатом",
+        "badge": "Результат і досвід",
+        "icon": "🏆",
+        "questions": [
+            {
+                "id": 1301,
+                "type": "perfect_form",
+                "question": "Як сказати: «Я вже бачив цей фільм» (маю такий життєвий досвід)?",
+                "options": ["I already saw this movie", "I have already seen this movie", "I am already seeing this movie", "I will seen this movie"],
+                "answer": 1,
+                "hint": "Present Perfect: have + already + 3-тя форма (seen).",
+                "explanation": "Зі словом already для життєвого досвіду вживається Present Perfect: «I have already seen this movie».",
+                "speechText": "I have already seen this movie"
+            },
+            {
+                "id": 1302,
+                "type": "perfect_question",
+                "question": "Як запитати співрозмовника: «Чи був ти коли-небудь у Лондоні?»",
+                "options": ["Did you ever be to London?", "Were you ever to London?", "Have you ever been to London?", "Do you ever been to London?"],
+                "answer": 2,
+                "hint": "Have you ever + 3-тя форма (been).",
+                "explanation": "Класичне питання про життєвий досвід: «Have you ever been to London?».",
+                "speechText": "Have you ever been to London?"
+            },
+            {
+                "id": 1303,
+                "type": "perfect_has",
+                "question": "Оберіть правильну форму для «Вона щойно прийшла»:",
+                "options": ["She has just arrived", "She have just arrived", "She is just arrived", "She did just arrived"],
+                "answer": 0,
+                "hint": "Для she в Present Perfect використовується has (а не have).",
+                "explanation": "З he/she/it використовується «has»: «She has just arrived».",
+                "speechText": "She has just arrived"
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "title": "Пасивний стан та фразові дієслова",
+        "subtitle": "Дія над предметом (is done) та магія часток (look for, give up)",
+        "badge": "Пасив і фразеологія",
+        "icon": "📦",
+        "questions": [
+            {
+                "id": 1401,
+                "type": "passive_voice",
+                "question": "Як перекласти: «Книга була написана в 1990 році»?",
+                "options": ["The book wrote in 1990", "The book was written in 1990", "The book is wrote in 1990", "The book was wrote in 1990"],
+                "answer": 1,
+                "hint": "Пасивний стан у минулому: was + 3-тя форма (written).",
+                "explanation": "Книга сама себе не писала, тому використовуємо Passive Voice: «The book was written in 1990».",
+                "speechText": "The book was written in 1990"
+            },
+            {
+                "id": 1402,
+                "type": "phrasal_verb",
+                "question": "Що означає популярне фразове дієслово «to give up»?",
+                "options": ["Підніматися", "Шукати", "Здаватися / кидати справу", "Віддавати назад"],
+                "answer": 2,
+                "hint": "«Never give up!» — Ніколи не здавайся!",
+                "explanation": "«To give up» означає «здаватися» або відмовлятися від звички: «Never give up!».",
+                "speechText": "Never give up"
+            },
+            {
+                "id": 1403,
+                "type": "phrasal_verb",
+                "question": "Як сказати: «Я шукаю свої ключі»?",
+                "options": ["I look my keys", "I am looking for my keys", "I look at my keys", "I am looking after keys"],
+                "answer": 1,
+                "hint": "To look for — шукати.",
+                "explanation": "Фразове дієслово «look for» означає «шукати»: «I am looking for my keys».",
+                "speechText": "I am looking for my keys"
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "title": "Умовні речення (Conditionals)",
+        "subtitle": "Реальні умови (If I do, I will) та гіпотези (If I did, I would)",
+        "badge": "Логіка умов",
+        "icon": "🌿",
+        "questions": [
+            {
+                "id": 1501,
+                "type": "first_conditional",
+                "question": "Оберіть граматично правильне речення («Якщо буде гарна погода, ми підемо гуляти»):",
+                "options": ["If the weather will be good, we will go for a walk", "If the weather is good, we will go for a walk", "If the weather will be good, we go walk", "If the weather is good, we went walk"],
+                "answer": 1,
+                "hint": "Після IF у реальній умові майбутній час will НЕ вживається!",
+                "explanation": "Золоте правило First Conditional: в підрядній частині з IF вживається Present Simple, а will ставиться лише в головній: «If the weather is good, we will go...».",
+                "speechText": "If the weather is good, we will go for a walk"
+            },
+            {
+                "id": 1502,
+                "type": "second_conditional",
+                "question": "Як сказати англійською мрію: «Якби я мав більше грошей, я б подорожував»?",
+                "options": ["If I have more money, I travel", "If I had more money, I would travel", "If I will have money, I will travel", "If I had money, I will travel"],
+                "answer": 1,
+                "hint": "Нереальна умова: If + Past Simple (had), WOULD + інфінітив.",
+                "explanation": "Second Conditional виражає уявну ситуацію: If + Past Simple, would + дієслово: «If I had more money, I would travel».",
+                "speechText": "If I had more money, I would travel"
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "title": "Підсумки та свобода спілкування",
+        "subtitle": "Фінальний іспит: перевірка всього курсу 16 уроків",
+        "badge": "Фінішна пряма 🎓",
+        "icon": "🎓",
+        "questions": [
+            {
+                "id": 1601,
+                "type": "review_matrix",
+                "question": "Як правильно запитати в минулому часі: «Ти бачив її вчора?»",
+                "options": ["Did you saw her yesterday?", "Did you see her yesterday?", "Do you see her yesterday?", "Were you see her yesterday?"],
+                "answer": 1,
+                "hint": "Did + перша початкова форма дієслова see.",
+                "explanation": "Після «Did» дієслово залишається у першій формі: «Did you see her yesterday?».",
+                "speechText": "Did you see her yesterday?"
+            },
+            {
+                "id": 1602,
+                "type": "review_tobe",
+                "question": "Оберіть речення без помилок:",
+                "options": ["She is a wonderful teacher", "She a wonderful teacher", "She are wonderful teacher", "She does wonderful teacher"],
+                "answer": 0,
+                "hint": "Дієслово to be обов'язкове для зв'язки в англійському реченні.",
+                "explanation": "«She is a wonderful teacher» — правильна структура зі зв'язкою is та артиклем a.",
+                "speechText": "She is a wonderful teacher"
+            },
+            {
+                "id": 1603,
+                "type": "review_philosophy",
+                "question": "Який головний принцип вивчення мови за методикою Дмитра Петрова?",
+                "options": [
+                    "Зубрити сотні граматичних винятків без розмови",
+                    "Спочатку вільне спілкування та задоволення від мови, а правильність прийде з практикою",
+                    "Ніколи не говорити вголос, поки не знаєш 10 000 слів",
+                    "Вчити англійську лише письмово"
+                ],
+                "answer": 1,
+                "hint": "Свобода перш за все!",
+                "explanation": "«Свобода перш за правильність: спочатку треба навчитися вільно говорити і позбутися страху, а потім шліфувати точність». Вітаємо з завершенням курсу! 🎉",
+                "speechText": "Freedom before correctness"
+            }
+        ]
+    }
+]
+
+with open('data/lessons_data.json', 'w', encoding='utf-8') as f:
+    json.dump(lessons_data, f, ensure_ascii=False, indent=2)
+
+print("Generated data/lessons_data.json successfully with", len(lessons_data), "lessons!")
