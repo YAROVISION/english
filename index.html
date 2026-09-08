@@ -36,8 +36,11 @@
         <button class="nav-btn" data-target="screen-matrix">
           <span>⚡</span> Матриця 3×3
         </button>
+        <button class="nav-btn" data-target="screen-big-dict">
+          <span>📚</span> Словник & Гра
+        </button>
         <button class="nav-btn" data-target="screen-dictionary">
-          <span>📖</span> Словник
+          <span>📖</span> Словничок курсу
         </button>
       </nav>
 
@@ -262,6 +265,175 @@
 
       <div class="words-grid" id="dictionary-grid">
         <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         Screen 7: Big Bilingual Dictionary & Word Guess Game
+         ---------------------------------------------------------------------- -->
+    <section id="screen-big-dict" class="screen">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">📚 Великий Англо-Український Словник (5 600+ слів) & Гра</h2>
+          <p style="color:var(--text-secondary); font-size:0.95rem;">
+            Словник за матеріалами Др. Василя Лева та Івана Вербяного. Повнотекстовий двомовний пошук та інтерактивна гра на відгадування слів.
+          </p>
+        </div>
+      </div>
+
+      <!-- Subtabs Navigation -->
+      <div class="subtabs-nav">
+        <button class="dict-subtab-btn active" data-subtab="dict">
+          📖 Пошук у словнику
+        </button>
+        <button class="dict-subtab-btn" data-subtab="game">
+          🎮 Гра «Відгадай слово»
+        </button>
+      </div>
+
+      <!-- Subtab 1: Dictionary Search & Browse -->
+      <div id="subtab-content-dict">
+        <div class="dict-direction-wrap">
+          <span style="font-weight:700; font-size:0.9rem; color:var(--text-secondary);">Напрямок перекладу:</span>
+          <button class="dict-dir-btn active" data-dir="en_to_ua">
+            🇬🇧 → 🇺🇦 Англо-український
+          </button>
+          <button class="dict-dir-btn" data-dir="ua_to_en">
+            🇺🇦 → 🇬🇧 Українсько-англійський
+          </button>
+        </div>
+
+        <div class="dict-filter-bar">
+          <input type="text" id="big-dict-search-input" class="search-input" placeholder="🔍 Пошук за англійським словом (наприклад: friend, life, open)...">
+        </div>
+
+        <!-- Alphabet ribbon -->
+        <div class="alphabet-ribbon" id="dict-alphabet-ribbon">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="dict-meta-bar">
+          <span id="dict-results-count">Завантаження слів...</span>
+        </div>
+
+        <div class="big-dict-grid" id="big-dictionary-grid">
+          <!-- Word cards rendered dynamically -->
+        </div>
+
+        <div class="pagination-controls" id="dict-pagination-controls" style="display:none;">
+          <button class="btn btn-secondary" id="dict-prev-page-btn">← Попередня</button>
+          <span id="dict-page-number" style="font-weight:700; color:var(--text-secondary);">Сторінка 1</span>
+          <button class="btn btn-secondary" id="dict-next-page-btn">Наступна →</button>
+        </div>
+      </div>
+
+      <!-- Subtab 2: Word Guessing Game -->
+      <div id="subtab-content-game" style="display:none;">
+        <!-- Setup Panel -->
+        <div class="game-setup-box" id="game-setup-panel">
+          <div style="font-size:3.5rem; margin-bottom:1rem;">🎯</div>
+          <h2>Тренажер: Гра «Відгадай слово»</h2>
+          <p style="color:var(--text-secondary); margin-top:0.5rem;">
+            Тренуйте свій словниковий запас! Обирайте напрямок та відгадуйте правильний переклад серед 4 варіантів.
+          </p>
+
+          <div class="game-setup-options">
+            <div>
+              <label for="game-mode-select" style="font-weight:700; display:block; margin-bottom:0.5rem;">Напрямок гри:</label>
+              <select id="game-mode-select" class="custom-select" style="width:100%;">
+                <option value="en_to_ua">🇬🇧 → 🇺🇦 Відгадати український переклад (за англійським словом)</option>
+                <option value="ua_to_en">🇺🇦 → 🇬🇧 Відгадати англійське слово (за українським значенням)</option>
+                <option value="random">🔀 Змішаний режим (випадковий напрямок кожного слова)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="game-count-select" style="font-weight:700; display:block; margin-bottom:0.5rem;">Кількість слів у раунді:</label>
+              <select id="game-count-select" class="custom-select" style="width:100%;">
+                <option value="10">10 слів (швидкий раунд)</option>
+                <option value="20" selected>20 слів (стандарт)</option>
+                <option value="30">30 слів (глибоке тренування)</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="start-word-game-btn" style="width:100%; padding:0.9rem; font-size:1.1rem;">
+            🚀 Почати гру
+          </button>
+        </div>
+
+        <!-- Arena Panel -->
+        <div class="game-arena-card" id="game-arena-panel" style="display:none;">
+          <div class="quiz-progress-bar-wrap">
+            <div class="quiz-meta-row">
+              <span class="badge-tag" id="wg-round-badge">Слово 1 з 10</span>
+              <span id="wg-score-text" style="color:var(--text-primary); font-weight:800;">Бали: 0</span>
+              <span id="wg-combo-text" style="color:#f97316; font-weight:800;"></span>
+            </div>
+            <div class="quiz-progress-track">
+              <div class="quiz-progress-fill" id="wg-progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="game-prompt-box">
+            <div class="game-direction-title" id="wg-direction-title">
+              🇬🇧 Відгадайте український переклад:
+            </div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:0.75rem;">
+              <h1 class="game-prompt-word" id="wg-prompt-word">friend</h1>
+              <button class="audio-btn" id="wg-audio-btn" title="Прослухати вимову">🔊</button>
+            </div>
+            <div class="game-prompt-hint" id="wg-hint-text">[frend]</div>
+          </div>
+
+          <div class="game-options-grid" id="wg-options-grid">
+            <!-- 4 Choice buttons rendered dynamically -->
+          </div>
+
+          <div class="game-feedback" id="wg-feedback">
+            <!-- Feedback card -->
+          </div>
+
+          <div class="quiz-actions">
+            <button class="btn btn-primary" id="game-next-round-btn" style="display:none;">
+              Наступне слово →
+            </button>
+          </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="result-card" id="game-results-panel" style="display:none;">
+          <div class="result-badge-anim" id="wg-result-icon">🏆</div>
+          <h2>Раунд завершено!</h2>
+          <div class="result-score-circle" id="wg-result-percent">100%</div>
+          
+          <div class="result-stats-row">
+            <div class="result-stat-col">
+              <span class="result-stat-num" id="wg-result-correct">10 з 10</span>
+              <span class="result-stat-lbl">Правильно</span>
+            </div>
+            <div class="result-stat-col">
+              <span class="result-stat-num" id="wg-result-combo">x5</span>
+              <span class="result-stat-lbl">Серія (Combo)</span>
+            </div>
+            <div class="result-stat-col">
+              <span class="result-stat-num" id="wg-result-xp">+120 XP</span>
+              <span class="result-stat-lbl">Досвід</span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-primary" id="game-retry-btn">
+              🔄 Грати ще один раунд
+            </button>
+            <button class="btn btn-outline" id="game-review-mistakes-btn" style="display:none;">
+              ⚡ Повторити помилки
+            </button>
+            <button class="btn btn-secondary" onclick="app.dictController.switchSubTab('dict')">
+              📖 Перейти до словника
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 

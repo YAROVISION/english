@@ -7,6 +7,7 @@ import { storage } from './storage.js';
 import { sound } from './speech.js';
 import { QuizEngine } from './quizEngine.js';
 import { verbMatrixData } from './verbMatrix.js';
+import { DictionaryPageController } from './dictionaryPage.js';
 
 class App {
   constructor() {
@@ -22,6 +23,8 @@ class App {
       onFinish: (result) => this.renderQuizResults(result)
     });
 
+    this.dictController = new DictionaryPageController();
+
     this.init();
   }
 
@@ -33,6 +36,7 @@ class App {
     this.renderDashboard();
     this.initVerbMatrix();
     this.renderDictionary();
+    await this.dictController.init();
   }
 
   /* --------------------------------------------------------------------------
