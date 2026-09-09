@@ -41,11 +41,23 @@ export class WordGame {
       this.activeWordsPool = [...specificWords].sort(() => Math.random() - 0.5);
       this.roundsTotal = this.activeWordsPool.length;
     } else {
-      // Pick random pool from dictionary
-      this.activeWordsPool = [...this.dictionary]
-        .filter(w => w.ua && w.ua.length > 2 && w.en && w.en.length > 1)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, Math.min(this.roundsTotal * 2, this.dictionary.length));
+      // Pick random pool efficiently from large dictionary without sorting entire array
+      const poolSize = Math.min(this.roundsTotal * 2, this.dictionary.length);
+      const chosenIndices = new Set();
+      const pool = [];
+      let attempts = 0;
+      while (pool.length < poolSize && attempts < poolSize * 10) {
+        attempts++;
+        const randIdx = Math.floor(Math.random() * this.dictionary.length);
+        if (!chosenIndices.has(randIdx)) {
+          chosenIndices.add(randIdx);
+          const candidate = this.dictionary[randIdx];
+          if (candidate && candidate.ua && candidate.ua.length > 1 && candidate.en && candidate.en.length > 1) {
+            pool.push(candidate);
+          }
+        }
+      }
+      this.activeWordsPool = pool.length > 0 ? pool : this.dictionary.slice(0, poolSize);
     }
 
     this.nextRound();

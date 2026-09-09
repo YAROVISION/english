@@ -1,6 +1,6 @@
 /**
  * Dictionary & Word Game UI Controller
- * Integrates 5,600+ bilingual words from base/file.pdf and WordGame engine
+ * Integrates 78,000+ entries from M. I. Balla English-Ukrainian Dictionary and WordGame engine
  */
 
 import { WordGame } from './wordGame.js';
@@ -175,28 +175,45 @@ export class DictionaryPageController {
   applyFilters() {
     let list = this.dictionary;
 
-    // Search text filter
-    if (this.searchQuery) {
-      if (this.direction === 'en_to_ua') {
-        list = list.filter(item => 
-          item.en.toLowerCase().includes(this.searchQuery) ||
-          item.ua.toLowerCase().includes(this.searchQuery)
-        );
-      } else {
-        list = list.filter(item => 
-          item.ua.toLowerCase().includes(this.searchQuery) ||
-          item.en.toLowerCase().includes(this.searchQuery)
-        );
-      }
-    }
-
-    // Alphabet letter filter
+    // Alphabet letter filter first (fast reduction)
     if (this.currentLetter && this.currentLetter !== 'ALL') {
       const targetL = this.currentLetter.toLowerCase();
       if (this.direction === 'en_to_ua') {
         list = list.filter(item => item.en.toLowerCase().startsWith(targetL));
       } else {
         list = list.filter(item => item.ua.trim().toLowerCase().startsWith(targetL));
+      }
+    }
+
+    // Search text filter with prefix priority
+    if (this.searchQuery) {
+      const q = this.searchQuery;
+      if (this.direction === 'en_to_ua') {
+        const starts = [];
+        const contains = [];
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          const enLow = item.en.toLowerCase();
+          if (enLow.startsWith(q)) {
+            starts.push(item);
+          } else if (enLow.includes(q) || item.ua.toLowerCase().includes(q)) {
+            contains.push(item);
+          }
+        }
+        list = starts.concat(contains);
+      } else {
+        const starts = [];
+        const contains = [];
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          const uaLow = item.ua.toLowerCase();
+          if (uaLow.startsWith(q)) {
+            starts.push(item);
+          } else if (uaLow.includes(q) || item.en.toLowerCase().includes(q)) {
+            contains.push(item);
+          }
+        }
+        list = starts.concat(contains);
       }
     }
 
@@ -247,6 +264,7 @@ export class DictionaryPageController {
           <div>
             <span class="dict-headword">${headword}</span>
             ${item.transcription ? `<span class="dict-transcription">${item.transcription}</span>` : ''}
+            ${item.pos ? `<span class="dict-pos" style="font-size:0.75rem; color:var(--primary); background:rgba(99,102,241,0.08); padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:600;">${item.pos}</span>` : ''}
           </div>
           <button class="icon-btn dict-audio-btn" data-speak="${item.en}" title="Вимова англійською">
             🔊
